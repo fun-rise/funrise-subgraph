@@ -1,0 +1,78 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "bundleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "AuctionOwnerSet",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "targetToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bundleId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string[]",
+            "name": "uris",
+            "type": "string[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "internalType": "uint24",
+                "name": "amount",
+                "type": "uint24"
+              }
+            ],
+            "internalType": "struct ERC2981Base.RoyaltyInfo",
+            "name": "royalty",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct AuctionSetOwnerOrder",
+        "name": "order",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "auctionSetOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

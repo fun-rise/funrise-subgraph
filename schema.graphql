@@ -1,0 +1,139 @@
+enum AssetStandard {
+  Unknown,
+  ERC721
+  ERC1155
+}
+
+enum AssetVersion {
+  None
+  V1
+}
+
+enum BundleState {
+  Idle
+  OnSale
+  Pending
+}
+
+enum ListingType {
+  Offchain
+  FixedPrice
+  Auction
+  VirtualAuction
+}
+
+type Account @entity {
+  "<accountAddress>"
+  id: ID!
+  nftCreated: [NFT!]! @derivedFrom(field: "creator")
+  transfersIn: [Transfer!]! @derivedFrom(field: "to")
+  transfersOut: [Transfer!]! @derivedFrom(field: "from")
+  purchasesIn: [Purchase!]! @derivedFrom(field: "to")
+  purchasesOut: [Purchase!]! @derivedFrom(field: "from")
+  royaltyOut: [Royalty!]! @derivedFrom(field: "payer")
+  royaltyIn: [Royalty!]! @derivedFrom(field: "receiver")
+  comissionsOut: [Comission!]! @derivedFrom(field: "payer")
+  comissionsIn: [Comission!]! @derivedFrom(field: "receiver")
+  assets: [Asset!]! @derivedFrom(field: "owner")
+  bundles: [Bundle!]! @derivedFrom(field: "owner")
+  bids: [Bid!]! @derivedFrom(field: "bidder")
+}
+
+type NFTContract @entity {
+  "<token>"
+  id: ID!
+  standard: AssetStandard!
+  version: AssetVersion
+  nfts: [NFT!]! @derivedFrom(field: "contract")
+}
+
+type NFT @entity {
+  "<token>-<tokenId>"
+  id: ID!
+  contract: NFTContract!
+  tokenId: BigInt!
+  creator: Account
+  tokenURI: String!
+  supply: BigInt!
+  totalTransferred: BigInt!
+  totalMinted: BigInt!
+  totalBurned: BigInt!
+  assets: [Asset!]! @derivedFrom(field: "nft")
+  royalty: [Royalty!]! @derivedFrom(field: "nft")
+}
+
+type Asset @entity {
+  "<owner>-<token>-<tokenId>"
+  id: ID!
+  nft: NFT!
+  bundle: Bundle
+  amount: BigInt!
+  price: BigInt!
+  owner: Account!
+}
+
+type Bundle @entity {
+  "<bundleId>"
+  id: ID!
+  owner: Account!
+  paymentToken: Bytes!
+  reservePrice: BigInt
+  listingTime: BigInt!
+  duration: BigInt
+  bid: Bid
+  state: BundleState!
+  listingType: ListingType!
+  assets: [Asset!]!
+}
+
+type Bid @entity {
+  "<bundleId>-<value>"
+  id: ID!
+  bundle: Bundle!
+  bidder: Account!
+  value: BigInt!
+  active: Boolean!
+  accepted: Boolean!
+}
+
+type Transfer @entity {
+  "<txhash>-<from>-<to>"
+  id: ID!
+  nft: NFT!
+  from: Account!
+  to: Account!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type Purchase @entity {
+  "<txhash>-<tokenId>"
+  id: ID!
+  nft: NFT!
+  from: Account!
+  to: Account!
+  paymentToken: Bytes!
+  price: BigInt!
+  amount: BigInt!
+  listingType: ListingType!
+  timestamp: BigInt!
+}
+
+type Royalty @entity {
+  "<txhash>-<receiver>-<tokenId>"
+  id: ID!
+  nft: NFT!
+  paymentToken: Bytes!
+  payer: Account!
+  receiver: Account!
+  value: BigInt!
+}
+
+type Comission @entity {
+  "<txhash>-<payer>-<value>"
+  id: ID!
+  paymentToken: Bytes!
+  payer: Account!
+  receiver: Account!
+  value: BigInt!
+}

@@ -1,0 +1,19 @@
+{
+  "name": "funrise",
+  "version": "0.1.0",
+  "scripts": {
+    "create": "graph create fun-rise/funrise --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create fun-rise/funrise --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy fun-rise/funrise --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy fun-rise/funrise --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.22.1",
+    "@graphprotocol/graph-ts": "^0.22.1"
+  },
+  "dependencies": {
+
+  }
+}
