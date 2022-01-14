@@ -113,8 +113,6 @@ export function handleAuctionResolved(event: AuctionResolved): void {
       for (let i = 0; i < bundle.assets.length; i++) {
   
         let asset = Asset.load(bundle.assets[i]) as Asset
-        asset.bundle = null
-        asset.save()
 
         let nft = NFT.load(asset.nft) as NFT
   
@@ -147,8 +145,6 @@ export function handleAuctionOwnerSet(event: AuctionOwnerSet): void {
   for (let i = 0; i < bundle.assets.length; i++) {
 
     let asset = Asset.load(bundle.assets[i]) as Asset
-    asset.bundle = null
-    asset.save()
 
     let nft = NFT.load(asset.nft) as NFT
 

@@ -6,7 +6,6 @@ import {
   Value,
   ValueKind,
   store,
-  Address,
   Bytes,
   BigInt,
   BigDecimal
@@ -606,8 +605,6 @@ export class Bid extends Entity {
     this.set("bundle", Value.fromString(""));
     this.set("bidder", Value.fromString(""));
     this.set("value", Value.fromBigInt(BigInt.zero()));
-    this.set("active", Value.fromBoolean(false));
-    this.set("accepted", Value.fromBoolean(false));
   }
 
   save(): void {

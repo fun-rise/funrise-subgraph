@@ -52,12 +52,12 @@ export function handleFixedPriceBundleUnlisted(event: FixedPriceBundleUnlisted):
 
   let bundle = getOrCreateBundle(event.params.bundleId.toString())
 
-  for (let i = 0; i < bundle.assets.length; i++) {
+  // for (let i = 0; i < bundle.assets.length; i++) {
 
-    let asset = Asset.load(bundle.assets[i]) as Asset
-    asset.bundle = null
-    asset.save()
-  }
+  //   let asset = Asset.load(bundle.assets[i]) as Asset
+  //   asset.bundle = null
+  //   asset.save()
+  // }
 
   bundle.state = "Idle"
   bundle.save()
@@ -72,7 +72,6 @@ export function handleFixedPriceBundleRedeemed(event: FixedPriceBundleRedeemed):
   for (let i = 0; i < bundle.assets.length; i++) {
 
     let asset = Asset.load(bundle.assets[i]) as Asset
-    asset.bundle = null
 
     let nft = NFT.load(asset.nft) as NFT
 
@@ -86,8 +85,6 @@ export function handleFixedPriceBundleRedeemed(event: FixedPriceBundleRedeemed):
     purchase.listingType = bundle.listingType
     purchase.timestamp = event.block.timestamp
     purchase.save()
-
-    asset.save()
   }
 
   bundle.state = "Idle"

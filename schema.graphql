@@ -63,7 +63,7 @@ type NFT @entity {
 }
 
 type Asset @entity {
-  "<owner>-<token>-<tokenId>"
+  "<bundleId>-<owner>-<token>-<tokenId>"
   id: ID!
   nft: NFT!
   bundle: Bundle

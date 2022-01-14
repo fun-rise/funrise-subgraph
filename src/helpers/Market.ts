@@ -37,7 +37,7 @@ export function getNullBundle(): Bundle {
 
 export function getOrCreateAsset(nft: NFT, bundle: Bundle): Asset {
 
-  let id = bundle.owner + '-' + nft.contract + '-' + nft.tokenId.toString()
+  let id = bundle.id + '-' + bundle.owner + '-' + nft.contract + '-' + nft.tokenId.toString()
 
   let existing = Asset.load(id)
   if (existing != null) {

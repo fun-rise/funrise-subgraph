@@ -35,7 +35,7 @@ dataSources:
     source:
       address: '0x78A903e897C0Fc039211B62a9CBbc26C12E1B8DC'
       abi: FERC1155V1
-      startBlock: 22461380
+      startBlock: 22461380 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -296,3 +296,4 @@ dataSources:
         - event: AuctionOwnerSet(indexed uint256,indexed address)
           handler: handleAuctionOwnerSet
       file: ./src/mappings/AuctionFacet.ts
+      
