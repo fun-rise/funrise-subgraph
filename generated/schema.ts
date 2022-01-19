@@ -6,6 +6,7 @@ import {
   Value,
   ValueKind,
   store,
+  Address,
   Bytes,
   BigInt,
   BigDecimal
@@ -131,6 +132,15 @@ export class Account extends Entity {
 
   set assets(value: Array<string>) {
     this.set("assets", Value.fromStringArray(value));
+  }
+
+  get balances(): Array<string> {
+    let value = this.get("balances");
+    return value!.toStringArray();
+  }
+
+  set balances(value: Array<string>) {
+    this.set("balances", Value.fromStringArray(value));
   }
 
   get bundles(): Array<string> {
@@ -358,6 +368,70 @@ export class NFT extends Entity {
 
   set royalty(value: Array<string>) {
     this.set("royalty", Value.fromStringArray(value));
+  }
+}
+
+export class NFTBalance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("account", Value.fromString(""));
+    this.set("nft", Value.fromString(""));
+    this.set("value", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save NFTBalance entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save NFTBalance entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("NFTBalance", id.toString(), this);
+    }
+  }
+
+  static load(id: string): NFTBalance | null {
+    return changetype<NFTBalance | null>(store.get("NFTBalance", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get account(): string {
+    let value = this.get("account");
+    return value!.toString();
+  }
+
+  set account(value: string) {
+    this.set("account", Value.fromString(value));
+  }
+
+  get nft(): string {
+    let value = this.get("nft");
+    return value!.toString();
+  }
+
+  set nft(value: string) {
+    this.set("nft", Value.fromString(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value!.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
   }
 }
 
@@ -605,6 +679,8 @@ export class Bid extends Entity {
     this.set("bundle", Value.fromString(""));
     this.set("bidder", Value.fromString(""));
     this.set("value", Value.fromBigInt(BigInt.zero()));
+    this.set("active", Value.fromBoolean(false));
+    this.set("accepted", Value.fromBoolean(false));
   }
 
   save(): void {

@@ -35,6 +35,7 @@ type Account @entity {
   comissionsOut: [Comission!]! @derivedFrom(field: "payer")
   comissionsIn: [Comission!]! @derivedFrom(field: "receiver")
   assets: [Asset!]! @derivedFrom(field: "owner")
+  balances: [NFTBalance!]! @derivedFrom(field: "account")
   bundles: [Bundle!]! @derivedFrom(field: "owner")
   bids: [Bid!]! @derivedFrom(field: "bidder")
 }
@@ -60,6 +61,14 @@ type NFT @entity {
   totalBurned: BigInt!
   assets: [Asset!]! @derivedFrom(field: "nft")
   royalty: [Royalty!]! @derivedFrom(field: "nft")
+}
+
+type NFTBalance @entity {
+  "<account>-<token>-<tokenId>"
+  id: ID!
+  account: Account!
+  nft: NFT!
+  value: BigInt!
 }
 
 type Asset @entity {

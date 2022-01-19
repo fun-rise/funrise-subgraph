@@ -3,7 +3,7 @@ import { Transfer } from '../../generated/schema'
 import { TransferSingle, TransferBatch, URI } from '../../generated/FERC1155V1/FERC1155V1'
 
 import { ZERO_ADDRESS } from '../helpers/Constants'
-import { getOrCreateNFT, getOrCreateNFTContract } from './NFT'
+import { getOrCreateNFT, getOrCreateNFTContract, getOrCreateNFTBalance } from './NFT'
 import { getOrCreateAccount } from '../helpers/Account'
 
 export function handleTransferSingle(event: TransferSingle): void {
@@ -31,13 +31,29 @@ export function handleTransferSingle(event: TransferSingle): void {
     nft.totalMinted = amount
     nft.creator = toAccount.id
 
+    let balanceTo = getOrCreateNFTBalance(nft, toAccount)
+    balanceTo.value = balanceTo.value + amount
+    balanceTo.save()
+
   } else if (event.params.to == ZERO_ADDRESS) {
 
     nft.totalBurned = nft.totalBurned.plus(amount)
 
+    let balanceFrom = getOrCreateNFTBalance(nft, fromAccount)
+    balanceFrom.value = balanceFrom.value - amount
+    balanceFrom.save()
+
   } else {
 
     nft.totalTransferred = nft.totalTransferred.plus(amount)
+
+    let balanceTo = getOrCreateNFTBalance(nft, toAccount)
+    balanceTo.value = balanceTo.value + amount
+    balanceTo.save()
+
+    let balanceFrom = getOrCreateNFTBalance(nft, fromAccount)
+    balanceFrom.value = balanceFrom.value - amount
+    balanceFrom.save()
   }
 
   fromAccount.save()
