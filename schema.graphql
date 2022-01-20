@@ -61,6 +61,7 @@ type NFT @entity {
   totalBurned: BigInt!
   assets: [Asset!]! @derivedFrom(field: "nft")
   royalty: [Royalty!]! @derivedFrom(field: "nft")
+  balances: [NFTBalance!]! @derivedFrom(field: "nft")
 }
 
 type NFTBalance @entity {

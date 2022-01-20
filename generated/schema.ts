@@ -369,6 +369,15 @@ export class NFT extends Entity {
   set royalty(value: Array<string>) {
     this.set("royalty", Value.fromStringArray(value));
   }
+
+  get balances(): Array<string> {
+    let value = this.get("balances");
+    return value!.toStringArray();
+  }
+
+  set balances(value: Array<string>) {
+    this.set("balances", Value.fromStringArray(value));
+  }
 }
 
 export class NFTBalance extends Entity {
