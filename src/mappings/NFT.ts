@@ -22,7 +22,7 @@ export function getOrCreateNFTContract(token: Address): NFTContract {
 
 export function getOrCreateNFT(tokenId: BigInt, contract: NFTContract): NFT {
 
-  let id = tokenId.toHexString() + '-' + contract.id
+  let id = contract.id + '-' + tokenId.toString()
   let existing = NFT.load(id)
 
   if (existing != null) {

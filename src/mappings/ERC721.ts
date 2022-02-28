@@ -6,9 +6,13 @@ import { Transfer as TransferEvent, URI } from '../../generated/FERC721V1/FERC72
 
 import { ZERO_ADDRESS } from '../helpers/Constants'
 import { getOrCreateAccount } from '../helpers/Account'
+import { getOrCreateTransaction } from '../helpers/Transaction'
 import { getOrCreateNFT, getOrCreateNFTContract, getOrCreateNFTBalance } from './NFT'
 
 export function handleTransfer(event: TransferEvent): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let tokenId = event.params.id
   let amount = BigInt.fromI32(1)
@@ -32,6 +36,7 @@ export function handleTransfer(event: TransferEvent): void {
     nft.supply = BigInt.fromI32(1)
     nft.totalMinted = BigInt.fromI32(1)
     nft.creator = toAccount.id
+    nft.transaction = transaction.id
 
     let balanceTo = getOrCreateNFTBalance(nft, toAccount)
     balanceTo.value = balanceTo.value + amount
@@ -63,6 +68,7 @@ export function handleTransfer(event: TransferEvent): void {
   nft.save()
 
   let transfer = new Transfer(event.transaction.hash.toHexString() + '-' + addressFrom + '-' + addressTo)
+  transfer.transaction = transaction.id
   transfer.nft = nft.id
   transfer.from = fromAccount.id
   transfer.to = toAccount.id
@@ -70,7 +76,12 @@ export function handleTransfer(event: TransferEvent): void {
   transfer.timestamp = event.block.timestamp
   transfer.save()
 }
+
 export function handleURI(event: URI): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let token = event.address
 
   let contract = getOrCreateNFTContract(token)

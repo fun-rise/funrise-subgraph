@@ -6,10 +6,14 @@ import { AuctionOwnerSet } from '../../generated/AuctionOwnershipFacet/AuctionOw
 import { AuctionBidReturned as AuctionBidReturnedResolved, AuctionResolved, RoyaltyPayed, ComissionPayed } from '../../generated/AuctionResolveFacet/AuctionResolveFacet'
 
 import { getOrCreateAccount } from '../helpers/Account'
+import { getOrCreateTransaction } from '../helpers/Transaction'
 import { getOrCreateBundle, getOrCreateAsset, getOrCreateBid, getBundleState, getAssetStandard } from '../helpers/Market'
 import { getOrCreateNFT, getOrCreateNFTContract } from './NFT'
 
 export function handleAuctionBundleListed1(event: AuctionBundleListed1): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let owner = getOrCreateAccount(event.params.owner.toHexString())
 
@@ -18,6 +22,7 @@ export function handleAuctionBundleListed1(event: AuctionBundleListed1): void {
   bundle.paymentToken = event.params.paymentToken
   bundle.listingTime = event.block.timestamp
   bundle.bid = null
+  bundle.transaction = transaction.id
 
   var assets = new Array<string>()
 
@@ -56,6 +61,9 @@ export function handleAuctionBundleListed2(event: AuctionBundleListed2): void {
 
 export function handleAuctionBidMade(event: AuctionBidMade): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let bundle = getOrCreateBundle(event.params.bundleId.toString())
   bundle.duration = event.params.newDuration
 
@@ -63,6 +71,7 @@ export function handleAuctionBidMade(event: AuctionBidMade): void {
   bidder.save()
 
   let bid = getOrCreateBid(event.params.bundleId.toString() + '-' + event.params.value.toString())
+  bid.transaction = transaction.id
   bid.bundle = bundle.id
   bid.bidder = bidder.id
   bid.accepted = false
@@ -77,6 +86,9 @@ export function handleAuctionBidMade(event: AuctionBidMade): void {
 
 export function handleAuctionBidReturned(event: AuctionBidReturned): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let bundle = getOrCreateBundle(event.params.bundleId.toString())
 
   if (bundle.bid != null) {
@@ -88,6 +100,9 @@ export function handleAuctionBidReturned(event: AuctionBidReturned): void {
 
 export function handleAuctionBidReturnedResolved(event: AuctionBidReturnedResolved): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let bundle = getOrCreateBundle(event.params.bundleId.toString())
 
   if (bundle.bid != null) {
@@ -98,6 +113,9 @@ export function handleAuctionBidReturnedResolved(event: AuctionBidReturnedResolv
 }
 
 export function handleAuctionResolved(event: AuctionResolved): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let bundle = getOrCreateBundle(event.params.bundleId.toString())
   bundle.state = "Idle"
@@ -125,6 +143,7 @@ export function handleAuctionResolved(event: AuctionResolved): void {
         purchase.amount = asset.amount
         purchase.listingType = bundle.listingType
         purchase.timestamp = event.block.timestamp
+        purchase.transaction = transaction.id
         purchase.save()
       }
     }
@@ -132,6 +151,9 @@ export function handleAuctionResolved(event: AuctionResolved): void {
 }
 
 export function handleAuctionOwnerSet(event: AuctionOwnerSet): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let newOwner = getOrCreateAccount(event.params.owner.toHexString())
   newOwner.save()
@@ -164,13 +186,17 @@ export function handleAuctionOwnerSet(event: AuctionOwnerSet): void {
 
 export function handleRoyaltyPayed(event: RoyaltyPayed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let contract = getOrCreateNFTContract(event.params.token)
   let nft = getOrCreateNFT(event.params.tokenId, contract)
 
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
-  let royalty = new Royalty(event.transaction.hash.toHex() + '-' + receiver.id + '-' + event.params.tokenId.toHexString())
+  let royalty = new Royalty(event.transaction.hash.toHexString() + '-' + receiver.id + '-' + event.params.tokenId.toString())
+  royalty.transaction = transaction.id
   royalty.nft = nft.id
   royalty.payer = payer.id
   royalty.receiver = receiver.id
@@ -185,10 +211,14 @@ export function handleRoyaltyPayed(event: RoyaltyPayed): void {
 
 export function handleComissionPayed(event: ComissionPayed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
   let comission = new Comission(event.transaction.hash.toHexString() + '-' + payer.id + '-' + event.params.value.toString())
+  comission.transaction = transaction.id
   comission.payer = payer.id
   comission.receiver = receiver.id
   comission.paymentToken = event.params.paymentToken

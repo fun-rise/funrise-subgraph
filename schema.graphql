@@ -51,6 +51,7 @@ type NFTContract @entity {
 type NFT @entity {
   "<token>-<tokenId>"
   id: ID!
+  transaction: Transaction!
   contract: NFTContract!
   tokenId: BigInt!
   creator: Account
@@ -85,6 +86,7 @@ type Asset @entity {
 type Bundle @entity {
   "<bundleId>"
   id: ID!
+  transaction: Transaction!
   owner: Account!
   paymentToken: Bytes!
   reservePrice: BigInt
@@ -99,6 +101,7 @@ type Bundle @entity {
 type Bid @entity {
   "<bundleId>-<value>"
   id: ID!
+  transaction: Transaction!
   bundle: Bundle!
   bidder: Account!
   value: BigInt!
@@ -109,6 +112,7 @@ type Bid @entity {
 type Transfer @entity {
   "<txhash>-<from>-<to>"
   id: ID!
+  transaction: Transaction!
   nft: NFT!
   from: Account!
   to: Account!
@@ -119,6 +123,7 @@ type Transfer @entity {
 type Purchase @entity {
   "<txhash>-<tokenId>"
   id: ID!
+  transaction: Transaction!
   nft: NFT!
   from: Account!
   to: Account!
@@ -132,6 +137,7 @@ type Purchase @entity {
 type Royalty @entity {
   "<txhash>-<receiver>-<tokenId>"
   id: ID!
+  transaction: Transaction!
   nft: NFT!
   paymentToken: Bytes!
   payer: Account!
@@ -142,8 +148,16 @@ type Royalty @entity {
 type Comission @entity {
   "<txhash>-<payer>-<value>"
   id: ID!
+  transaction: Transaction!
   paymentToken: Bytes!
   payer: Account!
   receiver: Account!
   value: BigInt!
+}
+
+type Transaction @entity {
+  "<txhash>"
+	id: ID!
+	timestamp: BigInt!
+	block: BigInt!
 }

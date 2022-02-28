@@ -3,10 +3,14 @@ import { Transfer } from '../../generated/schema'
 import { TransferSingle, TransferBatch, URI } from '../../generated/FERC1155V1/FERC1155V1'
 
 import { ZERO_ADDRESS } from '../helpers/Constants'
+import { getOrCreateTransaction } from '../helpers/Transaction'
 import { getOrCreateNFT, getOrCreateNFTContract, getOrCreateNFTBalance } from './NFT'
 import { getOrCreateAccount } from '../helpers/Account'
 
 export function handleTransferSingle(event: TransferSingle): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let tokenId = event.params.id
   let amount = event.params.value
@@ -30,6 +34,7 @@ export function handleTransferSingle(event: TransferSingle): void {
     nft.supply = amount
     nft.totalMinted = amount
     nft.creator = toAccount.id
+    nft.transaction = transaction.id
 
     let balanceTo = getOrCreateNFTBalance(nft, toAccount)
     balanceTo.value = balanceTo.value + amount
@@ -61,6 +66,7 @@ export function handleTransferSingle(event: TransferSingle): void {
   nft.save()
 
   let transfer = new Transfer(event.transaction.hash.toHexString() + '-' + addressFrom + '-' + addressTo)
+  transfer.transaction = transaction.id
   transfer.nft = nft.id
   transfer.from = fromAccount.id
   transfer.to = toAccount.id
@@ -70,6 +76,9 @@ export function handleTransferSingle(event: TransferSingle): void {
 }
 
 export function handleTransferBatch(event: TransferBatch): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let tokenIds = event.params.ids
   let amounts = event.params.values
@@ -95,6 +104,7 @@ export function handleTransferBatch(event: TransferBatch): void {
       nft.supply = amount
       nft.totalMinted = amount
       nft.creator = toAccount.id
+      nft.transaction = transaction.id
 
     } else if (event.params.to == ZERO_ADDRESS) {
   
@@ -108,6 +118,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     nft.save()
 
     let transfer = new Transfer(event.transaction.hash.toHexString() + '-' + addressTo)
+    transfer.transaction = transaction.id
     transfer.nft = nft.id
     transfer.from = fromAccount.id
     transfer.to = toAccount.id
@@ -122,6 +133,9 @@ export function handleTransferBatch(event: TransferBatch): void {
 
 export function handleURI(event: URI): void {
   let token = event.address
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let contract = getOrCreateNFTContract(token)
   contract.standard = "ERC1155"

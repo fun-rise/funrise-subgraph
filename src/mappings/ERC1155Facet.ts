@@ -3,9 +3,13 @@ import { Purchase, Royalty, Comission } from '../../generated/schema'
 import { RoyaltyPayed, ComissionPayed, FixedPriceERC1155Redeemed, FixedPriceERC1155BundleRedeemed } from '../../generated/ERC1155RedeemFacet/ERC1155RedeemFacet'
 
 import { getOrCreateAccount } from '../helpers/Account'
+import { getOrCreateTransaction } from '../helpers/Transaction'
 import { getOrCreateNFT, getOrCreateNFTContract } from './NFT'
 
 export function handleFixedPriceERC1155Redeemed(event: FixedPriceERC1155Redeemed): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let contract = getOrCreateNFTContract(event.params.token)
   contract.standard = "ERC1155"
@@ -18,6 +22,7 @@ export function handleFixedPriceERC1155Redeemed(event: FixedPriceERC1155Redeemed
   let to = getOrCreateAccount(event.params.to.toHexString())
 
   let purchase = new Purchase(event.transaction.hash.toHexString() + '-' + nft.tokenId.toString())
+  purchase.transaction = transaction.id
   purchase.nft = nft.id
   purchase.from = from.id
   purchase.to = to.id  
@@ -34,6 +39,9 @@ export function handleFixedPriceERC1155Redeemed(event: FixedPriceERC1155Redeemed
 
 export function handleFixedPriceERC1155BundleRedeemed(event: FixedPriceERC1155BundleRedeemed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let from = getOrCreateAccount(event.params.from.toHexString())
   let to = getOrCreateAccount(event.params.to.toHexString())
 
@@ -46,6 +54,7 @@ export function handleFixedPriceERC1155BundleRedeemed(event: FixedPriceERC1155Bu
     nft.save()
   
     let purchase = new Purchase(event.transaction.hash.toHexString() + '-' + nft.tokenId.toString())
+    purchase.transaction = transaction.id
     purchase.nft = nft.id
     purchase.from = from.id 
     purchase.to = to.id
@@ -63,6 +72,9 @@ export function handleFixedPriceERC1155BundleRedeemed(event: FixedPriceERC1155Bu
 
 export function handleRoyaltyPayed(event: RoyaltyPayed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let contract = getOrCreateNFTContract(event.params.token)
   contract.standard = "ERC1155"
   contract.save()
@@ -72,7 +84,8 @@ export function handleRoyaltyPayed(event: RoyaltyPayed): void {
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
-  let royalty = new Royalty(event.transaction.hash.toHex() + '-' + receiver.id + '-' + event.params.tokenId.toHexString())
+  let royalty = new Royalty(event.transaction.hash.toHexString() + '-' + receiver.id + '-' + event.params.tokenId.toString())
+  royalty.transaction = transaction.id
   royalty.nft = nft.id
   royalty.payer = payer.id
   royalty.receiver = receiver.id
@@ -87,10 +100,14 @@ export function handleRoyaltyPayed(event: RoyaltyPayed): void {
 
 export function handleComissionPayed(event: ComissionPayed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
   let comission = new Comission(event.transaction.hash.toHexString() + '-' + payer.id + '-' + event.params.value.toString())
+  comission.transaction = transaction.id
   comission.payer = payer.id
   comission.receiver = receiver.id
   comission.paymentToken = event.params.paymentToken

@@ -5,9 +5,13 @@ import { Purchase, Royalty, Comission } from '../../generated/schema'
 import { RoyaltyPayed, ComissionPayed, FixedPriceERC721Redeemed, FixedPriceERC721BundleRedeemed } from '../../generated/ERC721RedeemFacet/ERC721RedeemFacet'
 
 import { getOrCreateAccount } from '../helpers/Account'
+import { getOrCreateTransaction } from '../helpers/Transaction'
 import { getOrCreateNFT, getOrCreateNFTContract } from './NFT'
 
 export function handleRoyaltyPayed(event: RoyaltyPayed): void {
+
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
 
   let contract = getOrCreateNFTContract(event.params.token)
   contract.standard = "ERC721"
@@ -18,7 +22,8 @@ export function handleRoyaltyPayed(event: RoyaltyPayed): void {
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
-  let royalty = new Royalty(event.transaction.hash.toHex() + '-' + receiver.id + '-' + event.params.tokenId.toHexString())
+  let royalty = new Royalty(event.transaction.hash.toHex() + '-' + receiver.id + '-' + event.params.tokenId.toString())
+  royalty.transaction = transaction.id
   royalty.nft = nft.id
   royalty.payer = payer.id
   royalty.receiver = receiver.id
@@ -33,10 +38,14 @@ export function handleRoyaltyPayed(event: RoyaltyPayed): void {
 
 export function handleComissionPayed(event: ComissionPayed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let payer = getOrCreateAccount(event.params.buyer.toHexString())
   let receiver = getOrCreateAccount(event.params.receiver.toHexString())
 
   let comission = new Comission(event.transaction.hash.toHexString() + '-' + payer.id + '-' + event.params.value.toString())
+  comission.transaction = transaction.id
   comission.payer = payer.id
   comission.receiver = receiver.id
   comission.paymentToken = event.params.paymentToken
@@ -49,6 +58,9 @@ export function handleComissionPayed(event: ComissionPayed): void {
 
 export function handleFixedPriceERC721Redeemed(event: FixedPriceERC721Redeemed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let contract = getOrCreateNFTContract(event.params.token)
   contract.standard = "ERC721"
   contract.save()
@@ -60,6 +72,7 @@ export function handleFixedPriceERC721Redeemed(event: FixedPriceERC721Redeemed):
   let to = getOrCreateAccount(event.params.to.toHexString())
 
   let purchase = new Purchase(event.transaction.hash.toHexString() + '-' + nft.tokenId.toString())
+  purchase.transaction = transaction.id
   purchase.nft = nft.id
   purchase.from = from.id
   purchase.to = to.id  
@@ -76,6 +89,9 @@ export function handleFixedPriceERC721Redeemed(event: FixedPriceERC721Redeemed):
 
 export function handleFixedPriceERC721BundleRedeemed(event: FixedPriceERC721BundleRedeemed): void {
 
+  let transaction = getOrCreateTransaction(event)
+  transaction.save()
+
   let from = getOrCreateAccount(event.params.from.toHexString())
   let to = getOrCreateAccount(event.params.to.toHexString())
 
@@ -88,6 +104,7 @@ export function handleFixedPriceERC721BundleRedeemed(event: FixedPriceERC721Bund
     nft.save()
   
     let purchase = new Purchase(event.transaction.hash.toHexString() + '-' + nft.tokenId.toString())
+    purchase.transaction = transaction.id
     purchase.nft = nft.id
     purchase.from = from.id 
     purchase.to = to.id
