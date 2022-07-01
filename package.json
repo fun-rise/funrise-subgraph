@@ -5,9 +5,12 @@
     "create": "graph create fun-rise/funrise --node https://api.thegraph.com/deploy/",
     "create-local": "graph create fun-rise/funrise --node http://127.0.0.1:8020",
     "codegen": "graph codegen",
+    "codegen-staging": "graph codegen subgraph-staging.yaml",
     "build": "graph build",
+    "build-staging": "graph build subgraph-staging.yaml",
     "deploy": "graph deploy fun-rise/funrise --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy-mumbai": "graph deploy fun-rise/funrise-mumbai --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-staging": "graph deploy fun-rise/funrise-staging --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy-local": "graph deploy fun-rise/funrise --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {

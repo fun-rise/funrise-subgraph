@@ -189,16 +189,20 @@ export class ERC721MintRedeemCall__Inputs {
     );
   }
 
-  get marketSignature(): Bytes {
+  get mintSignature(): Bytes {
     return this._call.inputValues[2].value.toBytes();
   }
 
-  get mintSignature(): Bytes {
+  get marketSignature(): Bytes {
     return this._call.inputValues[3].value.toBytes();
   }
 
   get redeemSignature(): Bytes {
     return this._call.inputValues[4].value.toBytes();
+  }
+
+  get nonce(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 }
 
@@ -300,6 +304,10 @@ export class ERC721RedeemCall__Inputs {
   get signature(): Bytes {
     return this._call.inputValues[1].value.toBytes();
   }
+
+  get nonce(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
 }
 
 export class ERC721RedeemCall__Outputs {
@@ -365,6 +373,10 @@ export class ERC721RedeemBundleCall__Inputs {
 
   get signature(): Bytes {
     return this._call.inputValues[1].value.toBytes();
+  }
+
+  get nonce(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 

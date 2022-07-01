@@ -7,9 +7,9 @@ dataSources:
     name: FERC721V1
     network: matic
     source:
-      address: '0x0613Add1d532ab887d954eaEA73ddeE49f0a38a5'
+      address: '0xFA1cc9029BBe3aEb167becb906dBeD0B160Be4a9'
       abi: FERC721V1
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -34,9 +34,9 @@ dataSources:
     name: FERC1155V1
     network: matic
     source:
-      address: '0xFB1E7CCddd93001b0ec4Dd6022Dfc306552EDdF4'
+      address: '0x78A903e897C0Fc039211B62a9CBbc26C12E1B8DC'
       abi: FERC1155V1
-      startBlock: 25531000
+      startBlock: 22461380 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -63,9 +63,9 @@ dataSources:
     name: ERC721RedeemFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: ERC721RedeemFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -95,9 +95,9 @@ dataSources:
     name: ERC1155RedeemFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: ERC1155RedeemFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -127,9 +127,9 @@ dataSources:
     name: FixedPriceListFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: FixedPriceListFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -156,9 +156,9 @@ dataSources:
     name: FixedPriceRedeemFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: FixedPriceRedeemFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -190,9 +190,9 @@ dataSources:
     name: AuctionListFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: AuctionListFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -219,9 +219,9 @@ dataSources:
     name: AuctionBidFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: AuctionBidFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -248,9 +248,9 @@ dataSources:
     name: AuctionResolveFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: AuctionResolveFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -284,9 +284,9 @@ dataSources:
     name: AuctionOwnershipFacet
     network: matic
     source:
-      address: '0x6ec5eA39d474e3ad5eC361db60055dcC1e37c3F2'
+      address: '0x0Cad382EE701bBEc70F85E3b5C62a53709E85E6a'
       abi: AuctionOwnershipFacet
-      startBlock: 25531000
+      startBlock: 22461380
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
